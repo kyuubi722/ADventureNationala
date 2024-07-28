@@ -129,6 +129,7 @@ public class ADMINjucatori : MonoBehaviour
             LoadUsers();
         }
     }
+    //loads more users depending on batchSize//
      private void LoadUsers()
     {
     DBcon connection = new DBcon("users");

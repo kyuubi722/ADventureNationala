@@ -6,6 +6,7 @@ using System.Linq;
 
 public class loadData : MonoBehaviour
 {
+    //loads data from the json file//
     public string saveFilePath;
     public GameObject fatherDecoObjs;
     void Start()

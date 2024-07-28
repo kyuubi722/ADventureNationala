@@ -20,7 +20,9 @@ public class MainMenuCamScript : MonoBehaviour
     public GameObject settings;
     public GameObject tutorial;
     public GameObject authMenu;
-    //acest script verifica daca mouseul este apasat si in functie de objectul apasat desfasoara diferite actiuni//
+
+
+    //at the start of the application
     void Start(){
         SignInCanvas = GameObject.Find("SignUpForm");
             SignInCanvas.SetActive(false);
@@ -28,6 +30,8 @@ public class MainMenuCamScript : MonoBehaviour
         LogInCanvas.SetActive(false);
         authentified = false;
     }
+
+    //running every frame
     void Update()
     {   
         if(Role!=3){
@@ -57,6 +61,8 @@ public class MainMenuCamScript : MonoBehaviour
        restrictedmenu.SetActive(true);
     }
 }
+
+    //identifies the scene
     void seeAction(string name){
         switch(name){
             case "StartGame":{
@@ -79,10 +85,13 @@ public class MainMenuCamScript : MonoBehaviour
             }
         }
     }
+
+    //raycast to detect if the mouse is clicking on certain UI elements
     void checkForAuth(){
         Vector3 mousePosition = Input.mousePosition;
         Ray ray = mainCamera.ScreenPointToRay(mousePosition);
         RaycastHit hit;
+        // performs a raycast to see if it hits a clickable object
         if(Physics.Raycast(ray, out hit, Mathf.Infinity, ClickableObject)){
                 switch(hit.collider.gameObject.name){
                     case "LogIn":{

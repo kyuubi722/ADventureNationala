@@ -60,6 +60,8 @@ public class WorkCamScript : MonoBehaviour
             }
             }
     }
+
+    //handles mouse click to show an explanation form when specific objects are clicked
     void checkforExplanation(){
         if (Input.GetMouseButtonDown(0))
         {
@@ -169,14 +171,14 @@ public class WorkCamScript : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
         }
     }
-    //seteaza backgroundul normal cand nu este deschis nimic//
+    //sets the default background when nothing is opened//
     void setNormalBG(){
         Material newMaterial = new Material(Shader.Find("Standard"));
         newMaterial.mainTexture = normalBG;
         Renderer viewScreenRenderer = viewScreen.GetComponent<Renderer>();
         viewScreenRenderer.material = newMaterial;
     }
-    //verifica interactiunea cu diferite obiecte pentru a spauna diferite meniuri//
+    //check interaction with objects for spawning menues//
     void CheckMouseClick()
     {
         if (Input.GetMouseButtonDown(0))
@@ -219,7 +221,7 @@ public class WorkCamScript : MonoBehaviour
         settings.SetActive(true);
         startgameobj.SetActive(true);
     }
-    //incepe jocul principal//
+    //starts the main game//
     void startgameFunc(){
         aWindowIsOpened = true;
         GameStarted = true;

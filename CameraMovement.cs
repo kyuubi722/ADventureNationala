@@ -5,36 +5,36 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    public static float sens; // Sensibilitatea camerei
-    private float xRot; // Roțirea pe axa X
-    private float yRot; // Roțirea pe axa Y
-    public GameObject orientation; // Obiectul pentru orientare
+    public static float sens; // camera sensibility  
+    private float xRot; // x axis rotation
+    private float yRot; // y axis rotation
+    public GameObject orientation; // orientation object
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked; // Blocarea cursorului în centru
-        Cursor.visible = true; // Facem cursorul vizibil
+        Cursor.lockState = CursorLockMode.Locked; // blocks the cursor in the middle
+        Cursor.visible = true; // makes the cursor visible
     }
 
-    // Script simplu pentru mișcarea camerei
+    // camera movement script
     void Update()
     {
-        // Obține mișcarea mouse-ului în pixeli pe secundă și aplică sensibilitatea
+        // gets mouse movement in pixels per seconds and applies the sensibility
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sens;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sens;
 
-        // Actualizează rotația pe axele X și Y
+        //activates rotation
         yRot += mouseX;
         xRot -= mouseY;
 
-        // Limităm rotația pe axa X între anumite valori pentru a evita mișcările neobișnuite ale camerei
+        // limits the rotation on the x axis to reduce unusual camera movement
         xRot = Mathf.Clamp(xRot, -65f, 65f);
 
-        // Aplică rotația camerei în funcție de mișcarea mouse-ului
+        // applies camera rotation based on mouse movement
         transform.rotation = Quaternion.Euler(xRot, yRot, 0);
     }
 
-    // Actualizează orientarea în funcție de mișcarea mouse-ului în FixedUpdate pentru mișcări uniforme
+    // updates the orientation based on mouse movement
     void FixedUpdate()
     {
         orientation.transform.rotation = Quaternion.Euler(0, yRot, 0);

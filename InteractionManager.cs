@@ -13,54 +13,54 @@ public class InteractionHandler : MonoBehaviour
     public static string UserMail;
     public static int UserID;
     public LayerMask interactablelayer;
-    // Declarații de variabile publice și private
-    public LayerMask bed; // Strat pentru pat
+    // public and private variables declarations
+    public LayerMask bed; //bed layer
     public string saveFilePath;
     private bool lightactive = true;
     public LayerMask clickableObj;
     public static string motherString;
-    public Camera transitioncam; // Camera pentru tranziție
-    public GameObject restOfThings; // Obiectele ramase
-    public static bool CanInteract = true; // Flag pentru a permite interacțiunile
-    [SerializeField] private LayerMask computerLayer; // Strat pentru calculator
-    [SerializeField] public AudioSource usadeschis; // Sursa audio pentru deschidere
-    [SerializeField] public AudioSource usaclose; // Sursa audio pentru închidere
-    public GameObject player; // Referință la jucător
-    public GameObject transitionscreen; // Ecranul de tranziție
-    public static bool canReset=false; // Flag pentru a permite resetarea
-    public LayerMask changetrack; // Strat pentru schimbarea melodiei
-    private GameObject whiteDot; // Punctul alb
-    public LayerMask radioOnOff; // Strat pentru radio
-    public GameObject joculPrincipal; // Jocul principal
-    public GameObject playerCam; // Camera jucătorului
-    public Transform RaycastOrigin; // Originea razelor
-    public Animator radioAnimator; // Animatorul radio-ului
-    private GameObject interactButton; // Butonul de interacțiune
+    public Camera transitioncam; // transition camera
+    public GameObject restOfThings; // remaining objects
+    public static bool CanInteract = true; // flag for allowing interactions
+    [SerializeField] private LayerMask computerLayer; // pc layer
+    [SerializeField] public AudioSource usadeschis; // audio source for opening
+    [SerializeField] public AudioSource usaclose; // audio source for closing
+    public GameObject player; // player reference
+    public GameObject transitionscreen; // transition screen
+    public static bool canReset=false; // flag for allowing reset
+    public LayerMask changetrack; // layer for allowing to change the song
+    private GameObject whiteDot; // white dot 
+    public LayerMask radioOnOff; //radio layer
+    public GameObject joculPrincipal; // the main game
+    public GameObject playerCam; // player's camera
+    public Transform RaycastOrigin; // rays origin
+    public Animator radioAnimator; // radio animation
+    private GameObject interactButton; // intaraction button
     public GameObject light;
     public Animator chairanim;
-    public  GameObject gameCam; // Camera jocului
-    public RunningGameDB runnginGameNew; // Referință la alt script
-    private GameObject albumparentobj; // Obiectul părinte pentru copertele albumelor
-    private GameObject plantparentobj; // Obiectul părinte pentru plante
-    private GameObject decoparentobj; // Obiectul părinte pentru decorațiuni
-    public static bool radioState=false; // Starea radio-ului
-    public bool opened = false; // Flag pentru deschidere
-    RaycastHit hit; // Informații despre obiectul lovit
+    public  GameObject gameCam; // game camera
+    public RunningGameDB runnginGameNew; // reference to another script
+    private GameObject albumparentobj; // parent object for album covers
+    private GameObject plantparentobj; // parent object for plants
+    private GameObject decoparentobj; // parent object for decorations
+    public static bool radioState=false; // radio state
+    public bool opened = false; // Flag for opening
+    RaycastHit hit; // information regarding the hit object
 
     void Start(){
         transitioncam.gameObject.SetActive(false);
-        whiteDot = GameObject.Find("whiteDot"); // Găsirea punctului alb
-        joculPrincipal.SetActive(false); // Dezactivarea jocului principal
-        interactButton = GameObject.Find("Interact"); // Găsirea butonului de interacțiune
-        interactButton.SetActive(false); // Dezactivarea butonului de interacțiune inițial
-        albumparentobj = GameObject.Find("albumCovers"); // Găsirea obiectului părinte pentru copertele albumelor
-        decoparentobj = GameObject.Find("Decoratiuni"); // Găsirea obiectului părinte pentru decorațiuni
-        plantparentobj = GameObject.Find("Plants"); // Găsirea obiectului părinte pentru plante
+        whiteDot = GameObject.Find("whiteDot");
+        joculPrincipal.SetActive(false); 
+        interactButton = GameObject.Find("Interact"); 
+        interactButton.SetActive(false); 
+        albumparentobj = GameObject.Find("albumCovers"); 
+        decoparentobj = GameObject.Find("Decoratiuni");
+        plantparentobj = GameObject.Find("Plants"); 
          if (albumparentobj == null) {
-        Debug.LogError("Failed to find 'albumCovers' GameObject."); // Afisarea unei erori dacă obiectul părinte pentru copertele albumelor nu este găsit
+        Debug.LogError("Failed to find 'albumCovers' GameObject."); 
     }
     if (decoparentobj == null) {
-        Debug.LogError("Failed to find 'Decoratiuni' GameObject."); // Afisarea unei erori dacă obiectul părinte pentru decorațiuni nu este găsit
+        Debug.LogError("Failed to find 'Decoratiuni' GameObject."); 
     }
     }
     void handleLight(bool condition){
@@ -80,16 +80,16 @@ public class InteractionHandler : MonoBehaviour
     void Update()
     { 
         
-        // Activarea punctului alb dacă jucătorul este activ
+        // activates the white dot of player is active
         if(player.activeSelf)whiteDot.SetActive(true);  
-        // Verificarea apăsării tastei E și dacă jucătorul poate interacționa
+
         if (CanInteract && Input.GetKeyDown(KeyCode.E))
         {
-            TryInteract(); // Încercarea de interacțiune
+            TryInteract(); 
         }
-        checkRange(); // Verificarea razei de acțiune
+        checkRange(); 
     }
-//urmatoarea functie verifica apasarea asupra diferitor obiecte care vor desfasura actiuni//
+//checks clicking on certain objects to perform actions//
     void TryInteract()
     {
         if(Physics.Raycast(RaycastOrigin.transform.position, RaycastOrigin.forward, out hit, 2f, interactablelayer)){
@@ -104,27 +104,26 @@ public class InteractionHandler : MonoBehaviour
             }
         }
         
-        // Verificarea obiectului lovit și activarea jocului de pe computer
+        // checks the hit object and runs the game in the pc
         if (Physics.Raycast(RaycastOrigin.transform.position, RaycastOrigin.forward, out hit, 2f, computerLayer))
         {
-            whiteDot.SetActive(false); // Dezactivarea punctului alb
-            GetIntoComputer(); // Intrarea în computer
-            PlayerMovementTutorial.walking.Stop(); // Oprim sunetul de mers al jucătorului
+            whiteDot.SetActive(false);
+            GetIntoComputer(); 
+            PlayerMovementTutorial.walking.Stop(); 
         }
-        // Verificarea obiectului lovit și resetarea jocului dacă jucătorul doarme în pat
         if(Physics.Raycast(RaycastOrigin.transform.position, RaycastOrigin.forward, out hit, 2f, bed)&&canReset){
-            resetGamendSleep(); // Resetarea jocului și somnul
+            resetGamendSleep(); 
         }
-        // Verificarea obiectului lovit și activarea/dezactivarea radio-ului
+
         if(Physics.Raycast(RaycastOrigin.transform.position, RaycastOrigin.forward, out hit, 2f, radioOnOff)){
-            OnOffradio(); // Activarea/dezactivarea radio-ului
+            OnOffradio(); 
         }
-        // Verificarea obiectului lovit și schimbarea melodiei radio-ului
+
         if(Physics.Raycast(RaycastOrigin.transform.position, RaycastOrigin.forward, out hit, 2f, changetrack)){
-            changeTrackScript(hit.collider.gameObject); // Schimbarea melodiei
+            changeTrackScript(hit.collider.gameObject); 
         }
     }
-    //schimba melodia//
+    // changing the music
     void changeTrackScript(GameObject hitTrack){
         if(Input.GetKeyDown(KeyCode.E)){
             string name = hitTrack.name;
@@ -133,28 +132,29 @@ public class InteractionHandler : MonoBehaviour
             RadioScript.controlNumber = trackNumber;
         }
     }
-    //activeaza sau dezactiveaza radioul//
+
+    // turns on and off the radio
     void OnOffradio(){
-        radioState=!radioState; // Schimbarea stării radio-ului
+        radioState=!radioState; 
         if(radioState==false){
             RadioScript.firstTime=true;
         }
         radioAnimator.SetBool("RadioState",radioState); // Setarea animației radio-ului
     }
-    //functia principala de resetare a jocului, se ocupa si de spaunarea obiectelor cumparate in ziua respectiva//
+
+    // main method of resetting the game
     void resetGamendSleep()
     {
         loadData save = new loadData();
         motherString = motherString+ shopScript.musicBuy+ shopScript.plantBuy+ shopScript.decoBuy;
         save.Save();
-        // Resetarea unor variabile și pregătirea pentru somn
         WorkCamScript.GameStarted = false;
         RunningGameDB.score = 0;
-        RunningGameDB.CorrectAnswer =0; // Resetarea scorului corect
-        canReset = false; // Dezactivarea posibilității de resetare
-        runnginGameNew.ResetGame(); // Resetarea jocului
+        RunningGameDB.CorrectAnswer =0; 
+        canReset = false;
+        runnginGameNew.ResetGame(); 
 
-        // Obținerea obiectelor cumpărate în ziua respectivă și activarea acestora
+        // gaining the bought objects 
         string[] musicBought = shopScript.musicBuy.Split('_').Select(str => str.Trim()).ToArray();
         if(musicBought!=null){
             Transform[] musicTransforms = albumparentobj.GetComponentsInChildren<Transform>(true);
@@ -166,10 +166,10 @@ public class InteractionHandler : MonoBehaviour
                     music.SetActive(true);
                 }
             }
-            shopScript.musicBuy = ""; // Resetarea listei de cumpărături
+            shopScript.musicBuy = ""; // resetting the shopping list
         }
 
-        // Activarea plantelor cumpărate în ziua respectivă
+        // turns on the bought plants
         string[] plantBought = shopScript.plantBuy.Split('_').Select(str => str.Trim()).ToArray();
         if(plantBought!=null){ 
             Transform[] plantTransofrms = plantparentobj.GetComponentsInChildren<Transform>(true);
@@ -179,10 +179,10 @@ public class InteractionHandler : MonoBehaviour
                     plant.SetActive(true);
                 }
             }
-            shopScript.plantBuy = ""; // Resetarea listei de cumpărături
+            shopScript.plantBuy = ""; // resetting the shopping list
         }
 
-        // Activarea decorațiunilor cumpărate în ziua respectivă
+        // turns on the bought decorations
         string[] decoBought = shopScript.decoBuy.Split('_').Select(str => str.Trim()).ToArray();
         if(decoBought!=null){
             Transform[] decoTransofrms = decoparentobj.GetComponentsInChildren<Transform>(true);
@@ -192,45 +192,43 @@ public class InteractionHandler : MonoBehaviour
                     deco.SetActive(true);
                 }  
             }
-            shopScript.decoBuy = ""; // Resetarea listei de cumpărături
+            shopScript.decoBuy = ""; // resetting the shopping list
         }
 
-        // Pornește sunetul de trantit la pat
         AudioSource pat = GameObject.Find("Trantesc").GetComponent<AudioSource>();
         pat.Play();
 
-        // Dezactivează obiectele nededuse la pat și activează ecranul de tranziție
+
         restOfThings.SetActive(false);
         transitionscreen.SetActive(true);
         transitioncam.gameObject.SetActive(true);
 
-        // Dezactivează jucătorul și punctul alb, și setează cursorul
         player.SetActive(false);
         whiteDot.SetActive(false);
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        wait(); // Așteaptă pentru o perioadă de timp
-        restOfThings.SetActive(true); // Activează obiectele înapoi
+        wait(); 
+        restOfThings.SetActive(true); 
     }
 
-    // Funcție de așteptare
+    // waiting method
     IEnumerable wait(){
-        yield return new WaitForSeconds(3); // Așteaptă 3 secunde
+        yield return new WaitForSeconds(3); 
     }
-    // Intră în jocul de pe computer
+    // enters the game on the pc
     void GetIntoComputer()
     {   
-        joculPrincipal.SetActive(true); // Activează jocul de pe computer
-        CanInteract = false; // Dezactivează posibilitatea de interacțiune
-        playerCam.SetActive(false); // Dezactivează camera jucătorului
-        player.SetActive(false); // Dezactivează jucătorul
-        gameCam.SetActive(true); // Activează camera jocului
-        Cursor.visible = true; // Setează cursorul vizibil
-        Cursor.lockState = CursorLockMode.Confined; // Blocare a cursorului
-        checkRange(); // Verifică raza de acțiune
+        joculPrincipal.SetActive(true); 
+        CanInteract = false;
+        playerCam.SetActive(false); 
+        player.SetActive(false); 
+        gameCam.SetActive(true); 
+        Cursor.visible = true; 
+        Cursor.lockState = CursorLockMode.Confined; 
+        checkRange(); 
     }
 
-    // Verifică raza de acțiune și activează butonul de interacțiune
+    // chacks the ray of action
     void checkRange()
     {
         interactButton.SetActive(
@@ -241,7 +239,7 @@ public class InteractionHandler : MonoBehaviour
         );
     }
 
-    // Verifică dacă un obiect este interactiv
+    // checks if certain object is interactive
     bool IsInteractable(LayerMask layer, bool condition)
     {
         return condition && Physics.Raycast(RaycastOrigin.transform.position, RaycastOrigin.forward, out hit, 2f, layer);

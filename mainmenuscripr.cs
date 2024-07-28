@@ -14,7 +14,7 @@ public class mainmenuscripr : MonoBehaviour
     public GameObject Text;
     public GameObject mainmenu;
     public static bool GameStarted=false;
-    //urmatorul script activeaza elementele ce nu fac parte din meniu si le dezactiveaza pe cele ce fac parte din el
+    //script turns on and off menu elements
     void Start()
     {
         transitionscreen.SetActive(false);

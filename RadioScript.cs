@@ -13,7 +13,8 @@ public class RadioScript : MonoBehaviour
     private int[] trackNumbers = new int[]{
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
     };
-    //scriptul pentru radio//
+
+    //running at the start of the application
     void Start()
     {
         if (firstTime)
@@ -23,6 +24,7 @@ public class RadioScript : MonoBehaviour
         }
     }
 
+    //running every frame
     void Update()
     {
         if (InteractionHandler.radioState)
@@ -42,7 +44,7 @@ public class RadioScript : MonoBehaviour
 
     void ChangeTrack()
     {
-        //opreste melodia anterioara si o porneste pe cea actuala//
+        // turns off previous song and turns on the actual song
         if (previousTrack != -1)
         {
             GameObject prevTrackObj = GameObject.Find("Tracksong." + trackNumbers[previousTrack]);

@@ -4,119 +4,119 @@ using UnityEngine;
 public class PlayerMovementTutorial : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private float moveSpeed = 4f; // Viteza de bază de deplasare a jucătorului
-    [SerializeField] private float sprintSpeedMultiplier = 1.5f; // Multiplu pentru viteza de alergare
+    [SerializeField] private float moveSpeed = 4f; // intial speed
+    [SerializeField] private float sprintSpeedMultiplier = 1.5f; 
 
-    public static bool canRun = true; // Posibilitatea de a alerga
+    public static bool canRun = true; 
 
-    [SerializeField] private float groundDrag = 6f; // Frâna pe sol pentru oprirea jucătorului
-    private Vector3 moveDirection; // Direcția de mișcare a jucătorului
+    [SerializeField] private float groundDrag = 6f; 
+    private Vector3 moveDirection; 
 
-    [HideInInspector] public float walkSpeed; // Viteza de mers
-    [HideInInspector] public float sprintSpeed; // Viteza de alergare
+    [HideInInspector] public float walkSpeed; 
+    [HideInInspector] public float sprintSpeed; 
 
     [Header("Keybinds")]
-    [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift; // Tasta pentru a alerga
-    public static AudioSource walking; // Sursa audio pentru sunetul de mers
+    [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift; 
+    public static AudioSource walking; 
 
     [Header("Ground Check")]
-    [SerializeField] private float playerHeight = 2f; // Înălțimea jucătorului
-    private bool grounded; // Starea de a fi pe pământ
-    public Transform orientation; // Orientarea jucătorului
+    [SerializeField] private float playerHeight = 2f; 
+    private bool grounded; 
+    public Transform orientation; 
 
-    private Rigidbody rb; // Componenta rigidbody a jucătorului
+    private Rigidbody rb; 
 
-    // Inițializare
+    // initialisation
     private void Start()
     {
-        rb = GetComponent<Rigidbody>(); // Obținerea componentei rigidbody
-        rb.freezeRotation = true; // Blocarea rotației
-        walkSpeed = moveSpeed; // Inițializarea vitezei de mers
-        sprintSpeed = moveSpeed * sprintSpeedMultiplier; // Inițializarea vitezei de alergare
-        walking = GameObject.Find("FootstepsSound").GetComponent<AudioSource>(); // Obținerea sursei audio pentru sunetul de mers
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true; 
+        walkSpeed = moveSpeed; 
+        sprintSpeed = moveSpeed * sprintSpeedMultiplier; 
+        walking = GameObject.Find("FootstepsSound").GetComponent<AudioSource>();
     }
 
-    // Actualizare
+    // updates every frame
     private void Update()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f); // Verificarea dacă jucătorul este pe pământ
-        MyInput(); // Verificarea input-ului
-        SpeedControl(); // Controlul vitezei
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f); 
+        MyInput(); 
+        SpeedControl(); 
     }
 
-    // Actualizare fizică
+    // physical update
     private void FixedUpdate()
     {
-        Playsound(); // Redarea sunetului de mers
-        MovePlayer(); // Mișcarea jucătorului
+        Playsound(); 
+        MovePlayer(); 
     }
 
-    // Redarea sunetului de mers
+    // walking sound
     private void Playsound()
     {
-        bool isMoving = Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0 || Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0; // Verificarea dacă jucătorul se mișcă
+        bool isMoving = Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0 || Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0; // checks if player can move
         if (isMoving)
         {
-            if (Input.GetKey(sprintKey) && canRun) // Verificarea dacă jucătorul alerge și poate să alerge
+            if (Input.GetKey(sprintKey) && canRun) 
             {
-                walking.pitch = 1.5f; // Schimbarea tonului sunetului de mers pentru alergare
+                walking.pitch = 1.5f; 
             }
             else
             {
-                walking.pitch = 1f; // Resetarea tonului sunetului de mers pentru mers obișnuit
+                walking.pitch = 1f; 
             }
 
-            if (!walking.isPlaying) // Redarea sunetului de mers dacă nu este deja redat
+            if (!walking.isPlaying) 
             {
                 walking.Play();
             }
         }
         else
         {
-            walking.Stop(); // Oprirea sunetului de mers dacă jucătorul nu se mișcă
+            walking.Stop(); 
         }
     }
 
-    // Verificarea input-ului jucătorului
+    // checks player input
     private void MyInput()
     {
-        float horizontalInput = Input.GetAxisRaw("Horizontal"); // Inputul pe axa orizontală (stânga-dreapta)
-        float verticalInput = Input.GetAxisRaw("Vertical"); // Inputul pe axa verticală (înainte-înapoi)
+        float horizontalInput = Input.GetAxisRaw("Horizontal"); 
+        float verticalInput = Input.GetAxisRaw("Vertical"); 
 
-        if (Input.GetKey(sprintKey) && canRun) // Verificarea dacă jucătorul apasă tasta pentru a alerga și poate să alerge
+        if (Input.GetKey(sprintKey) && canRun) 
         {
-            moveSpeed = sprintSpeed; // Setarea vitezei de mers la viteza de alergare
+            moveSpeed = sprintSpeed; 
         }
         else
         {
-            moveSpeed = walkSpeed; // Setarea vitezei de mers la viteza de bază de mers
+            moveSpeed = walkSpeed; 
         }
     }
 
-    // Mișcarea jucătorului
+    // player movement
     private void MovePlayer()
     {
-        float horizontalInput = Input.GetAxisRaw("Horizontal"); // Inputul pe axa orizontală (stânga-dreapta)
-        float verticalInput = Input.GetAxisRaw("Vertical"); // Inputul pe axa verticală (înainte-înapoi)
+        float horizontalInput = Input.GetAxisRaw("Horizontal"); 
+        float verticalInput = Input.GetAxisRaw("Vertical"); 
 
-        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput; // Calcularea direcției de mișcare
-        moveDirection.Normalize(); // Normalizarea direcției de mișcare
+        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput; 
+        moveDirection.Normalize(); 
 
-        if (grounded) // Verificarea dacă jucătorul este pe pământ
+        if (grounded)
         {
-            rb.drag = groundDrag; // Setarea frânei pe sol
-            rb.AddForce(moveDirection * moveSpeed * 6f, ForceMode.Acceleration); // Aplicarea forței pentru mișcare
+            rb.drag = groundDrag;
+            rb.AddForce(moveDirection * moveSpeed * 6f, ForceMode.Acceleration);
         }
     }
 
-    // Controlul vitezei jucătorului
+    // player speed controller
     private void SpeedControl()
     {
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z); // Viteza fără componenta verticală
-        if (flatVel.magnitude > moveSpeed) // Verificarea dacă viteza este mai mare decât viteza maximă permisă
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z); 
+        if (flatVel.magnitude > moveSpeed) 
         {
-            Vector3 limitedVel = flatVel.normalized * moveSpeed; // Limitarea vitezei la valoarea maximă
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z); // Setarea vitezei limitate
+            Vector3 limitedVel = flatVel.normalized * moveSpeed; 
+            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z); 
         }
     }
 }

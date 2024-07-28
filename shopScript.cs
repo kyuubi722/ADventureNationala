@@ -40,7 +40,8 @@ public class shopScript : MonoBehaviour
         if(canBuyDeco)buyDeco();
         if(canBuyNature)buyNature();
     }
-    //script simplu pentru shop. Concateneaza un string cu diferite elemente predefinite urmand sa fie separat in cuvinte diferite pentru a fi activate(in metoda ResetGame din Interaction Handler)
+    // Simple shop script. Concatenates a string with various predefined elements to be separated into different words to be activated (in the ResetGame method of Interaction Handler)
+
     void executeShopCommands(){
          if (Input.GetMouseButtonDown(0))
         {

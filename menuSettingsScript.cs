@@ -11,7 +11,7 @@ public class menuSettingsScript : MonoBehaviour
         menucam = GameObject.Find("MainMenuCam").GetComponent<Camera>();
     }
 
-    //updateaza limba intrebarilor in functie de ce este apasat sau
+    //updates the languages
     void Update()
     {
         if(gameObject.transform.localPosition== new Vector3(-32f, 1.31f, 16.01f)){

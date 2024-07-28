@@ -58,13 +58,13 @@ public class QuestionPos3 : MonoBehaviour {
             rightanswer = GameObject.Find("H3aswer"+ QuestionCorrectAns);
         }
         if(Input.GetMouseButtonDown(0)){
-            //verifica daca mausul este apasat//
+            // checks if mouse is pressed
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if(Physics.Raycast(ray, out hit)){
                 GameObject clickedobject = hit.collider.gameObject;
-            //verifica daca raspunsul este corect, respectiv gresit//
+            // checks if answer is right or wrong
                 if(clickedobject == rightanswer){
                     answerisright(position);
                  }else if(clickedobject==ans1||clickedobject==ans2||clickedobject==ans3||clickedobject==ans4){
@@ -204,7 +204,7 @@ public void answeriswrong(string position)
         RunningGameDB.pos1Xcoord = 14.01f;
     }
     void TextCasetPosition(GameObject intrebare, GameObject raspuns1, GameObject raspuns2, GameObject raspuns3, GameObject raspuns4){
-        //pozitioneaza textul//
+        // places the text in right position
         intrebare.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
         raspuns1.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
         raspuns2.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
@@ -222,7 +222,7 @@ public void answeriswrong(string position)
         raspuns4.transform.localScale= new Vector3(0.1742f, 0.207f, 0.2409f);
     }
     void loadtext(){
-        //incarca textul pentru intrebare//
+        // loads the text
         if(loaded==false){
              loaded=true;
             Transform textAux = gameObject.transform.Find("questionText");

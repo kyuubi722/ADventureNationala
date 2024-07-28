@@ -10,7 +10,7 @@ public class CycleBGauth : MonoBehaviour
     public Material frame3;
     private Renderer render;
     private Material[] frames;
-
+    //cycles background images (homemade animation :3)//
     void Start()
     {
         render = backgroundCube.GetComponent<Renderer>();

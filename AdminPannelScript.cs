@@ -18,7 +18,7 @@ public class AdminPannelScript : MonoBehaviour
     public Sprite Neselectat;
     public GameObject jucatoriPannel;
     public GameObject raporturiPannel;
-    
+    //Switches different screens based on what is pressed//
     public void SelectIntrebari(){
         intrebariPannel.SetActive(true);
         jucatoriPannel.SetActive(false);

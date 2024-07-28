@@ -7,76 +7,93 @@ using UnityEngine;
 
 public class ExplainFormScript : MonoBehaviour
 {
+    // References to question position classes
     QuestionPos1 question1;
     QuestionPos2 question2;
     QuestionPos3 question3;
+
+    // UI elements for displaying explanations
     public TMP_Text explanation;
+    
+    // Static fields to track the question position, table name, and question text
     public static int PositionCalled;
     public static string tablename;
     public static string QuestionName;
+
+    // Game objects for the explanation canvas and submission canvas
     public GameObject explaincanvas;
     public GameObject explainSubmitCanvas;
 
+    // Method to cancel/hide the explanation canvas
     public void cancelCanvas()
     {
         explaincanvas.SetActive(false);
     }
 
+    // Method to confirm and load the explanation submission canvas
     public void confirm()
     {
-        Debug.Log(QuestionName+ tablename+ PositionCalled);
+        Debug.Log(QuestionName + tablename + PositionCalled);
         explainSubmitCanvas.SetActive(true);
         loadexplainsubmitCanvas();
         ReloadExplainedQuestion();
     }
+
+    // Load the explanation submission canvas with the solution from the database
     void loadexplainsubmitCanvas()
-{
-    DBcon connection = new DBcon("adventure");
-    if (connection.OpenConnection())
     {
-        using (MySqlConnection conn = connection.dbConnection)
+        DBcon connection = new DBcon("adventure");
+        if (connection.OpenConnection())
         {
-            string query = "SELECT QuestionSolution FROM " + tablename + " WHERE QuestionTXT = @txt";
-            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            using (MySqlConnection conn = connection.dbConnection)
             {
-                cmd.Parameters.AddWithValue("@txt", QuestionName);
-                try
+                string query = "SELECT QuestionSolution FROM " + tablename + " WHERE QuestionTXT = @txt";
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    cmd.Parameters.AddWithValue("@txt", QuestionName);
+                    try
                     {
-                        if (reader.Read())
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
-                            string solution = reader["QuestionSolution"].ToString();
-                            explanation.text = solution;
-                        }
-                        else
-                        {
-                            Debug.LogWarning("No");
+                            if (reader.Read())
+                            {
+                                string solution = reader["QuestionSolution"].ToString();
+                                explanation.text = solution;
+                            }
+                            else
+                            {
+                                Debug.LogWarning("No solution found for the question.");
+                            }
                         }
                     }
-                }
-                catch 
-                {
-                }
-                finally
-                {
-                    conn.Close();
+                    catch 
+                    {
+                        // Handle exceptions if needed
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
                 }
             }
         }
-    }
-    else
-    {
-        Debug.LogError("Failed to open database connection.");
-    }
+        else
+        {
+            Debug.LogError("Failed to open database connection.");
+        }
     }
 
-    public void exitall(){
+    // Method to exit/close all explanation-related canvases
+    public void exitall()
+    {
         explaincanvas.SetActive(false);
         explainSubmitCanvas.SetActive(false);
     }
+
+    // Reload and display the explained question based on its position
     void ReloadExplainedQuestion()
     {
+        // Find the question object based on its position
         GameObject intrebare = GameObject.Find("HolderPosition" + PositionCalled);
         if (intrebare != null)
         {
@@ -108,16 +125,19 @@ public class ExplainFormScript : MonoBehaviour
         }
     }
 
+    // Call the method to handle a wrong answer for the first question position
     void goquestion1(QuestionPos1 question)
     {
         question.answeriswrong(question.position);
     }
 
+    // Call the method to handle a wrong answer for the second question position
     void goquestion2(QuestionPos2 question)
     {
         question.answeriswrong(question.position);
     }
 
+    // Call the method to handle a wrong answer for the third question position
     void goquestion3(QuestionPos3 question)
     {
         question.answeriswrong(question.position);

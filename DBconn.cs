@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DBcon
 {
+    //data base connection
     private string connectionString;
     public MySqlConnection dbConnection;
 

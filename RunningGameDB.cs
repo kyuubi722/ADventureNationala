@@ -38,7 +38,7 @@ public class RunningGameDB : MonoBehaviour
     };
     public static string[] CurrentQuestions = new string[]{
         "-1", "-1", "-1"
-    };
+    };//holds the current questions id so the player will not have 2 or 3 questions alike at the same time//
     GameObject endscreen;
     public void Start(){
         endscreen = GameObject.Find("EndOfGameScreen");
@@ -47,7 +47,7 @@ public class RunningGameDB : MonoBehaviour
         pos2Xcoord= 14.01f;
         pos3Xcoord= 14.49f;
     }
-    //reseteaza cativa din parametrii folositi la inceperea unei zile noi//
+    //resets different parameters//
     public void ResetGame()
     {
         Wronganswers = new string[]{
@@ -63,7 +63,7 @@ public class RunningGameDB : MonoBehaviour
         presumedLives=3;
     }
 
-//urmatoarea functie spauneaza intrebarile in functie de petformanta si salveaza intrebarile spaunate//
+//the big boss function, spawns questions//
   public void SpawnQuestionsCoroutine(string QuestionPos)
 {
     if (lives > 0)
@@ -73,10 +73,8 @@ public class RunningGameDB : MonoBehaviour
         DBcon connection = new DBcon("adventure");
         query = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'adventure' ORDER BY RAND() LIMIT 1;";
         string randomtablename = connection.ExecuteScalar(query).ToString();
-
         Start:
         query = "SELECT QuestionID, QuestionTXT, QuestionAns1, QuestionAns2, QuestionAns3, QuestionAns4, QuestionRightAns, QuestionSolution FROM " + randomtablename + " ORDER BY RAND() LIMIT 1;";
-
         try
         {
             connection.OpenConnection();
@@ -90,7 +88,6 @@ public class RunningGameDB : MonoBehaviour
                         Debug.Log($"QuestionID {Questionid} already exists in CurrentQuestions. Skipping.");
                         goto Start;
                     }
-
                     QuestionTXT = reader.GetString("QuestionTXT");
                     QuestionAns1 = reader.GetString("QuestionAns1");
                     QuestionAns2 = reader.GetString("QuestionAns2");
@@ -98,7 +95,6 @@ public class RunningGameDB : MonoBehaviour
                     QuestionAns4 = reader.GetString("QuestionAns4");
                     QuestionRightAns = reader.GetInt32("QuestionRightAns");
                     solution = reader.GetString("QuestionSolution");
-
                     CurrentQuestions[questionnumberHandler % 3] = QuestionTXT;
                     SpawnQuestionBigBOSS(QuestionTXT, QuestionAns1, QuestionAns2, QuestionAns3, QuestionAns4, QuestionRightAns, QuestionPos, randomtablename, Questionid);
                 }
@@ -115,7 +111,7 @@ public class RunningGameDB : MonoBehaviour
     }
     questionnumberHandler++;
 }
-
+//loads questions based on the one found
 void SpawnQuestionBigBOSS(string QuestionTXT, string ANS1, string ANS2, string ANS3, string ANS4, int RightAns, string position, string tablename, int questionid)
 {
     switch (position)
@@ -213,7 +209,7 @@ void SpawnQuestionBigBOSS(string QuestionTXT, string ANS1, string ANS2, string A
         }
         
     }
-    //calculeaza scorul in functie de diferiti parametrii//
+    //Score calculator//
     double CalculateScore(int rightAnswers, int WrongAnswers){
         const int pointsPerRight = 10;
         const int pointsPerWrong = 5;
@@ -223,7 +219,7 @@ void SpawnQuestionBigBOSS(string QuestionTXT, string ANS1, string ANS2, string A
         int roundedScore = (int)Math.Round(finalScore);
         return roundedScore;
     }
-    //activeaza sau dezactiveaza holderul de vieti//
+    //Life holder //
     void setActiveUnActive(){
         if(lives==0){
             lifeHolder.SetActive(false);
@@ -231,7 +227,7 @@ void SpawnQuestionBigBOSS(string QuestionTXT, string ANS1, string ANS2, string A
             lifeHolder.SetActive(true);
         }
     }
-    //acest cod spauneaza caseta de sfarsit in care este afisat scorul si alte informatii//
+    //spawns the end screen that contains score and more//
     void endgame(){
         WorkCamScript.aWindowIsOpened=false;
         WorkCamScript.GameStarted=false;
@@ -262,7 +258,7 @@ void SpawnQuestionBigBOSS(string QuestionTXT, string ANS1, string ANS2, string A
             lifeHolder.transform.localPosition = new Vector3(3.75f, 0.2f, -4f);
         }
     }
-    //acest script updateaza numarul de vieti cand acestea se schimba//
+    //updates the number of lifes//
     void loadlives(short presumedLives){
         short PositionHandler = -3;
         for(short i=presumedLives; i>=1;i--){

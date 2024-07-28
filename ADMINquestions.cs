@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.IO;
 public class ADMINquestions : MonoBehaviour
 {
+    //UI ELEMENTS//
     public TMP_InputField questionSearchField;
     public GameObject AddQuestionField;
     public TMP_Text nrintrebaritxt;
@@ -24,6 +25,7 @@ public class ADMINquestions : MonoBehaviour
     public TMP_InputField ModifcareIntrebareAns4;
     public TMP_InputField ModifcareIntrebareRaspunsCorect;
     public TMP_InputField ModifcareIntrebareExplicatie;
+    //VARS//
     public GameObject dropdownbutton;
     private int IdIntrebareGasita;
     public GameObject AfisareIntrebareCanvas;
@@ -37,6 +39,7 @@ public class ADMINquestions : MonoBehaviour
 
     void Update(){
     }
+    //load the question ammount//
      void loadQuestionNr(string selectedValue)
     {
         DBcon connection = new DBcon("adventure");
@@ -70,6 +73,7 @@ public class ADMINquestions : MonoBehaviour
             Debug.LogError("Unable to open database connection.");
         }
     }
+    //Initialize dropdowns and listener//
     void Start()
     {
          finddropdown.onValueChanged.AddListener(delegate
@@ -79,6 +83,7 @@ public class ADMINquestions : MonoBehaviour
         LoadFindDropDown();
         LoadAddDropDown();
     }
+    //Open Dialog for adding questions from txt files//
      public void OpenDialog()
 {
     FindQuestiontableName = getSelectedElementAdd();
@@ -105,7 +110,7 @@ public class ADMINquestions : MonoBehaviour
     }
 }
 
-
+//processes added questions//
     private void ProcessSelectedFile(string filePath)
 {
     try
@@ -159,13 +164,16 @@ public class ADMINquestions : MonoBehaviour
         Debug.LogError("Error processing file: " + ex.Message);
     }
 }
-
+//handles opening different canvases//
     public void OpenAddQuestionSolo(){
         AddQuestionField.SetActive(true);
     }
     public void CloseAddQuestionSolo(){
         AddQuestionField.SetActive(false);
     }
+//handles opening different canvases//
+
+//adds a solo question based on different parameteres added by the user//
     public void ConfirmAddQuestionSolo(){
         if(AddQuestionText.text!=""&&AddQuestionAns1.text!=""&&AddQuestionAns2.text!=""&&AddQuestionAns3.text!=""&&AddQuestionAns4.text!=""&&AddQuestionRightans.text!=""&&AddQuestionSolution.text!=""){
         FindQuestiontableName = getSelectedElementAdd();
@@ -204,6 +212,8 @@ public class ADMINquestions : MonoBehaviour
             errortext.text = "Este obligatoriu ca toate casetele sa fie completate!";
         }
     }
+
+//adds a table//
     public void AddTable(){
         NumeTabelNou = numeTabelNou.text;
         if(NumeTabelNou!=""){
@@ -230,6 +240,7 @@ public class ADMINquestions : MonoBehaviour
             AddColumnUtilizatori(NumeTabelNou);
         }
     }
+//adds the respective column to the users table//
     void AddColumnUtilizatori(string numetabel){
         DBcon connection = new DBcon("users");
         if (connection.OpenConnection())
@@ -313,7 +324,7 @@ public class ADMINquestions : MonoBehaviour
         Debug.LogError("Failed to open connection to database.");
     }
 }
-
+//loads found question//
     void loadAfisareIntrebare(string QuestionTXT, int raspunsuriC, int raspunsuriG){
         AfisareIntrebareCanvas.SetActive(true);
         Afisare_IntrebareText.text = QuestionTXT;
@@ -353,6 +364,7 @@ public class ADMINquestions : MonoBehaviour
         ModificareIntrebareCanvas.SetActive(true);
         loadModificareIntrebare();
     }
+    //loads modify question//
     void loadModificareIntrebare()
     {
         DBcon connection = new DBcon("adventure");

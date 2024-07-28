@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class SensivitySetSCRIPT : MonoBehaviour
 {
+    //sets sensivity (flat is 300)//
     public float sensivity=300;
-    public Camera Settingcam; // Referință la camera pentru setările de volum
-    public static GameObject parentObj; // Referință la obiectul părinte al sunetelor
-    public LayerMask interact; // Masca stratului pentru interacțiunea cu obiectele
+    public Camera Settingcam; // volume settigs camera reference
+    public static GameObject parentObj; // parent object of sounds reference
+    public LayerMask interact; // layer for objects intaraction
     void Start()
     {
         setsens(sensivity);
@@ -20,23 +21,23 @@ public class SensivitySetSCRIPT : MonoBehaviour
         {
         if (Settingcam != null)
             {
-                // Determină poziția cursorului mouse-ului și trasează un raycast către cursor
+                // gets the mouse cursor and draws a raycast towards it
                 Vector3 mousePosition = Input.mousePosition;
                 Ray ray = Settingcam.ScreenPointToRay(mousePosition);
                 RaycastHit hit;
-                // Verifică dacă raycast-ul lovește un obiect în stratul interacțiunii
+                // checks if raycast hits an objects
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, interact))
                 {   
-                    // Verifică dacă obiectul lovit nu este nul
+
                     if(hit.collider.gameObject!=null){
-                        // Verifică numele obiectului lovit și ajustează volumul în funcție de acesta
+                        
                         switch (hit.collider.gameObject.name){
-                            case "sensDown": // Dacă este butonul pentru volum mai mic
+                            case "sensDown": 
                             sensivity-=10;
                             setsens(sensivity);
                                 Debug.Log("volumjos");
                                 break;
-                            case "sensUp": // Dacă este butonul pentru volum mai mare
+                            case "sensUp": 
                             sensivity+=10;
                             setsens(sensivity);
                                 break;
@@ -46,7 +47,7 @@ public class SensivitySetSCRIPT : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Main camera reference is null!"); // Afiseaza eroare daca referinta la camera principala este nula
+                Debug.LogError("Main camera reference is null!"); 
             }
         }
 }
